@@ -104,8 +104,14 @@ export const fetchAllPrices = async (): Promise<EvePraisalResult> => {
   const allPI = PI_TYPES_ARRAY.map((t) => {
     return { quantity: 1, type_id: t.type_id };
   });
-  return await fetch("api/praisal", {
+  const res = await fetch("api/praisal", {
     method: "POST",
     body: JSON.stringify(allPI),
-  }).then((res) => res.json());
+  });
+  const data = await res.json().catch(() => undefined);
+  // Without prices the app still works; values just show as 0.
+  if (!res.ok || !data?.appraisal?.items) {
+    throw new Error("PI prices unavailable");
+  }
+  return data;
 };
