@@ -10,11 +10,15 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       body: new URLSearchParams({ grant_type: "authorization_code", code }).toString(),
       headers: ssoHeaders(env),
     });
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      const detail = await response.text();
+      console.error("token_request_failed", response.status, detail);
+      return json({ error: `EVE SSO returned ${response.status}`, detail }, 502);
+    }
 
     const data: any = await response.json();
     const character = extractCharacter(data.access_token);
-    if (!character) return new Response(null, { status: 500 });
+    if (!character) return json({ error: "Could not read character from token" }, 500);
 
     return json({
       access_token: data.access_token,
@@ -31,6 +35,6 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     });
   } catch (e) {
     console.error("token_request_failed", e);
-    return new Response(null, { status: 500 });
+    return json({ error: "Token exchange failed", detail: String(e) }, 500);
   }
 };

@@ -106,7 +106,15 @@ const Home = () => {
       }
       window.history.replaceState(null, "", "/");
       const res = await fetch(`api/token?code=${code}`);
-      const newCharacter: AccessToken = await res.json();
+      const body = await res.json().catch(() => null);
+      if (!res.ok || !body?.character) {
+        console.error("EVE login failed", res.status, body);
+        alert(
+          `EVE login failed: ${body?.error ?? res.status}${body?.detail ? `\n${body.detail}` : ""}`,
+        );
+        return characters;
+      }
+      const newCharacter: AccessToken = body;
       const oldCharacter = characters.find(
         (c) => c.character.characterId === newCharacter.character.characterId,
       );
