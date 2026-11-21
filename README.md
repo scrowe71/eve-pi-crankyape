@@ -1,3 +1,15 @@
+# EVE PI — pi.crankyape.space
+
+This is CrankyApe's fork of [Calli's EVE PI tool](https://github.com/calli-eve/eve-pi), hosted at https://pi.crankyape.space on Cloudflare Pages.
+
+**Fork changes:** built as a static Next.js export; the five server routes (`/api/env`, `/api/token`, `/api/refresh`, `/api/revoke`, `/api/praisal`) are Cloudflare Pages Functions in `functions/api`; Sentry, Plausible and the Docker setup were removed.
+
+**Cloudflare Pages settings:** build command `npm run build`, output directory `out`, production branch `main`. Variables: `EVE_SSO_CLIENT_ID`, `EVE_SSO_CALLBACK_URL` (`https://pi.crankyape.space`), and `EVE_SSO_SECRET` as an encrypted secret. Optional `PRAISAL_URL`.
+
+**Pulling in upstream updates:** `git fetch https://github.com/calli-eve/eve-pi main` then `git merge FETCH_HEAD` (any new `src/pages/api` changes need porting to `functions/api`).
+
+---
+
 # Callis PI tool
 
 Simple tool to track your PI planet extractors. Login with your characters and enjoy the PI!

@@ -1,0 +1,4 @@
+# Cloudflare Pages config for pi.crankyape.space
+name = "eve-pi"
+pages_build_output_dir = "out"
+compatibility_date = "2026-11-01"
