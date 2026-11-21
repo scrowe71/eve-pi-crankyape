@@ -13,7 +13,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     if (!response.ok) {
       const detail = await response.text();
       console.error("token_request_failed", response.status, detail);
-      return json({ error: `EVE SSO returned ${response.status}`, detail }, 502);
+      return json({ error: `EVE SSO returned ${response.status}`, detail }, 400);
     }
 
     const data: any = await response.json();
